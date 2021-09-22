@@ -4,20 +4,16 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
-
-
-class DatabaseSeeder extends Seeder
+class CompanySeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-         $this->call([
-            UserSeeder::class,
-            QuizSeeder::class,
-         ]);
+        $count = 100;
+        \App\Models\Company::factory($count)->create();
     }
 }

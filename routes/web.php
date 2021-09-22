@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\QuizController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +19,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+//middleware gruplama işlemi aşağıdaki gibi yapılır ve resource controller aşağıdaki gibidir
+Route::group(['middleware'=>['auth','isAdmin'],'prefix'=>'admin'],function(){
+    Route::resource('quizzes',QuizController::class);
+});
