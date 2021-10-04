@@ -1,7 +1,8 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: true }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
+
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
@@ -92,6 +93,15 @@
 
                         <x-slot name="content">
                             <!-- Account Management -->
+                            @if(auth()->user()->type=='admin')
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                Admin İşlemleri
+                            </div>
+
+                            <x-jet-dropdown-link href="{{ route('quizzes.index') }}">
+                               Quizler
+                            </x-jet-dropdown-link>
+                            @endif
                             <div class="block px-4 py-2 text-xs text-gray-400">
                                 {{ __('Manage Account') }}
                             </div>
@@ -142,6 +152,7 @@
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
         </div>
+        
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

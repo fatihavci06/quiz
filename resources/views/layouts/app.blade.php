@@ -16,14 +16,38 @@
         @livewireStyles
 
         <!-- Scripts -->
-        <script src="{{ mix('js/app.js') }}" defer></script>
+        <script src="{{ mix('js/app.js') }}" ></script>
+        
     </head>
     <body class="font-sans antialiased">
         <x-jet-banner />
 
         <div class="min-h-screen bg-gray-100">
             @livewire('navigation-menu')
+            
+                            <!-- Account Management -->
+                            @if(auth()->user()->type=='admin')
+                        
 
+                            <x-jet-dropdown-link href="{{ route('quizzes.index') }}">
+                               Quizler
+                            </x-jet-dropdown-link>
+                            @endif
+                            
+
+                            <div class="border-t border-gray-100"></div>
+
+                            <!-- Authentication -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+
+                                <x-jet-dropdown-link href="{{ route('logout') }}"
+                                         onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                    {{ __('Log Out') }}
+                                </x-jet-dropdown-link>
+                            </form>
+                        
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
@@ -37,10 +61,31 @@
 
             <!-- Page Content -->
              @if (isset($message2))
+                         @if($errors->any())
+                        <div class="alert alert-danger"> 
+                            @foreach($errors->all() as $e)
+                                <li>{{$e}}</li>
+                            @endforeach
+                        </div>
+                        @endif
+
+                     @if(session('success'))
+                        <div class="alert alert-success">{{session('success')}}</div>
+                     @endif
             <div class="py-12">
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                        {{ $message2 }}
+                    </div>
+                </div>
+            </div>
+             @endif
+
+              @if (isset($js))
+            <div class="py-12">
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                       {{ $js }}
                     </div>
                 </div>
             </div>

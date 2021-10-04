@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Models\Quiz;
+use App\Http\Requests\QuizCreateRequest;
+use App\Http\Requests\QuizUpdateRequest;
+use Illuminate\Support\Str;
 class QuizController extends Controller
 {
     /**
@@ -12,9 +15,18 @@ class QuizController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return 'burası index';
+        $data['quizzes']=Quiz::withCount('questions');
+        if($request->get('title')){
+          $data['quizzes']=$data['quizzes']->where('title','LIKE','%'.$request->get('title').'%');
+        }
+        if($request->get('status')){
+            $data['quizzes']=$data['quizzes']->where('status','LIKE','%'.$request->get('status').'%');
+        }
+         $data['quizzes']=$data['quizzes']->paginate(5);
+
+       return view('admin.quiz.list',$data);
     }
 
     /**
@@ -24,7 +36,7 @@ class QuizController extends Controller
      */
     public function create()
     {
-        return 'burası create';
+        return view('admin.quiz.create');
     }
 
     /**
@@ -33,9 +45,18 @@ class QuizController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(QuizCreateRequest $request)
     {
-        //
+        $quiz= new Quiz;
+        $quiz->title=$request->title;
+        $quiz->descryption=$request->descryption;
+        $quiz->slug=Str::slug($request->title);
+        $quiz->finished_at=$request->finished_at;
+        $quiz->status='draft';
+        $quiz->save();
+
+
+        return redirect()->route('quizzes.index')->withSuccess('Quiz Başarıyla Oluşturuldu');
     }
 
     /**
@@ -57,7 +78,9 @@ class QuizController extends Controller
      */
     public function edit($id)
     {
-        //
+         $quiz=Quiz::withCount('questions')->findOrFail($id);
+       
+        return view('Admin.quiz.edit',compact('quiz'));
     }
 
     /**
@@ -67,9 +90,17 @@ class QuizController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(QuizUpdateRequest $request, $id)
     {
-        //
+        $quiz=Quiz::findOrFail($id);
+        $quiz->title=$request->title;
+        $quiz->descryption=$request->descryption;
+        $quiz->slug=Str::slug($request->title);
+        $quiz->finished_at=$request->finished_at;
+        $quiz->status=$request->status;
+        $quiz->save();
+
+        return redirect()->route('quizzes.index')->withSuccess('Quiz Güncelleme İşlemi Başarılı!');
     }
 
     /**
@@ -80,6 +111,8 @@ class QuizController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $quiz=Quiz::findOrFail($id);
+        $quiz->delete();
+        return redirect()->route('quizzes.index')->withSuccess('Quiz Silme İşlemi Başarılı!');
     }
 }
