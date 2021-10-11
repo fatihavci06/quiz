@@ -29,9 +29,19 @@
 
             </div>
             <div class="col-md-4">
-                <div class="col-md-4">
-                    deneme
-                </div>
+                
+                    <div class="card mt-2" style="width: 18rem;">
+                          <div class="card-header">
+                            Sonuçlarım
+                          </div>
+                          <ul class="list-group list-group-flush">
+                             @foreach($sonuclar as $s)
+                            <li class="list-group-item">{{$s->point}}-<a href="{{route('quiz.detail',$s->quiz->slug)}}">{{$s->quiz->title}}</a></li>
+                            @endforeach
+                            
+                          </ul>
+                        </div>
+                
                 
             </div>
 

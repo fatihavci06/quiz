@@ -32,7 +32,7 @@
     			</div>
     			<div  @if(!$quiz->finished_at) style="display:none;" @endif  id="finishInput" class="form-group">
     				<label>Quiz Bitiş Tarihi</label>
-    				<input type="datetime-local" name="finished_at" @if($quiz->finished_at) value="{{date('Y-m-d\TH:i',strtotime($quiz->finished_at))}}" @endif class="form-control">
+    				<input type="datetime-local" id="finishsifirla" name="finished_at" @if($quiz->finished_at) value="{{date('Y-m-d\TH:i',strtotime($quiz->finished_at))}}" @endif class="form-control">
     			</div><br/>
     			<div class="form-group">
     				<button type="submit" class="form-control btn btn-success btn-sm btn-block">Güncelle</button>
@@ -48,6 +48,8 @@
 				}
 				else{
 					$('#finishInput').hide();
+					$('#finishsifirla').val('');
+					
 				}
 			})
 		</script>

@@ -23,6 +23,7 @@ Route::get('/', function () {
 
 Route::group(['middleware'=>'auth'],function(){
     Route::get('dashboard','App\Http\Controllers\Maincontroller@dashboard')->name('dashboard');
+     Route::get('quiz/show/{slug}','App\Http\Controllers\Admin\QuizController@show')->name('quiz.show');
     Route::get('quiz/detay/{slug}','App\Http\Controllers\Maincontroller@quiz_detail')->name('quiz.detail');
     Route::get('quiz/{slug}','App\Http\Controllers\Maincontroller@quiz')->name('quiz.join');
     Route::post('quiz/{slug}/result','App\Http\Controllers\Maincontroller@result')->name('quiz.result');

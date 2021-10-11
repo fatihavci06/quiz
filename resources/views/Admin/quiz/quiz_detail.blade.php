@@ -6,25 +6,11 @@
      <x-slot name="message2">
        
           <div class="card-body">
+            <div class="row"><div class="col-md-4"><a href="{{route('quizzes.index')}}" class="btn btn-success btn-sm">Geri</a></div></div>
             <div class="row">
                 <div class="col-md-4">
                     <ul class="list-group">
-                        @if($quiz_detay->my_result)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                           Puan
-                            <span title="{{$quiz_detay->finished_at}}">
-                             {{ $quiz_detay->my_result->point }}
-                         </span>
-                          </li>
-                          @endif
-                            @if($quiz_detay->my_result)
-                          <li class="list-group-item d-flex justify-content-between align-items-center">
-                           Doğru/Yanlış Sayısı
-                            <span title="{{$quiz_detay->finished_at}}" >
-                             {{ $quiz_detay->my_result->correct }} Doğru /{{ $quiz_detay->my_result->wrong }} Yanlış
-                         </span>
-                          </li>
-                          @endif
+                        
 
                         @if($quiz_detay->finished_at)
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -50,13 +36,13 @@
                       @endif
                       
                     </ul>
-                    @if($top10)
+                    @if($quiz_detay->top10)
                     <div class="card mt-2">
                         <div class="card-body">
                             <h5 class="card-title">İlk 10</h5>
                             <ul class="list-group">
-                                @foreach($top10 as $t)
-                                <li class="list-group-item" @if(auth()->user()->id==$t->user_id) style="color:#3ed;" @endif>
+                                @foreach($quiz_detay->top10 as $t)
+                                <li class="list-group-item" >
                                     {{$loop->iteration}}-
                                     {{$t->uyebilgisi->name}}
                                     <span>{{$t->point}}</span>
@@ -80,15 +66,32 @@
                 </div>
                 <div class="col-md-8">
                       <p class="card-text"> {{$quiz_detay->descryption}}</p>
+                      <table class="table table-bordered">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Ad Soyad</th>
+                                  <th scope="col">Puan</th>
+                                  <th scope="col">Doğru</th>
+                                  <th scope="col">Yanlış</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @foreach($quiz_detay->results as $q)
+                                <tr>
+                                  <td >{{$q->uyebilgisi->name}}</td>
+                                  <td>{{$q->point}}</td>
+                                  <td>{{$q->correct}}</td>
+                                  <td>{{$q->wrong}}</td>
+                                </tr>
+                                @endforeach
+                                
+                              </tbody>
+                            </table>
                     
                     
 
                     
-                    @if($quiz_detay->my_result )
-                    <a href="{{route('quiz.join',$quiz_detay->slug)}}" class="btn btn-primary btn-block btn-sm">Quizi Görüntüle </a>
-                    @elseif($quiz_detay->finished_at>now())
-                      <a href="{{route('quiz.join',$quiz_detay->slug)}}" class="btn btn-primary btn-block btn-sm">Quize Katıl</a>
-                    @endif
+                    
                    
                 </div>
             </div>

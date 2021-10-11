@@ -47,7 +47,14 @@
                       <td>
                           @switch($q->status)
                               @case('publish')
+                                @if(!$q->finished_at)
                                 <span >Aktif</span>
+
+                                @elseif($q->finished_at>now())
+                                <span >Aktif</span>
+                                @else
+                                <span >Tarihi Dolmuş</span>
+                                @endif
                               @break
                               @case('passive')
                                 <span >Pasif</span>
@@ -64,6 +71,7 @@
 
 </td>
                       <td>
+                        <a href="{{route('quizzes.show',$q->id)}}" class="btn btn-sm btn-secondary"><i class="fa fa-info"></i></a>
                         <a href="{{route('questions.index',$q->id)}}" class="btn btn-sm btn-warning"><i class="fa fa-question"></i></a>
                         <a href="{{route('quizzes.edit',$q->id)}}" class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>
                         <a href="{{route('quizzes.sil',$q->id)}}" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></a>

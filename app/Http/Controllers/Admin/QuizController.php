@@ -67,7 +67,8 @@ class QuizController extends Controller
      */
     public function show($id)
     {
-        //
+          $quiz_detay=Quiz::withCount('results')->withAvg('results','point')->withCount('questions')->with('top10')->with('results.uyebilgisi')->where('id',$id)->first();
+        return view('Admin.quiz.quiz_detail',compact('quiz_detay'));
     }
 
     /**
@@ -92,11 +93,16 @@ class QuizController extends Controller
      */
     public function update(QuizUpdateRequest $request, $id)
     {
+       $request->finished_at;
         $quiz=Quiz::findOrFail($id);
         $quiz->title=$request->title;
         $quiz->descryption=$request->descryption;
         $quiz->slug=Str::slug($request->title);
-        $quiz->finished_at=$request->finished_at;
+       $quiz->finished_at=$request->finished_at;
+        
+
+      
+       
         $quiz->status=$request->status;
         $quiz->save();
 
